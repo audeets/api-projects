@@ -1,6 +1,6 @@
 {
   "amqp": {
-    "connect": "amqp://192.168.99.100"
+    "connect": "amqp://192.168.1.26"
   },
   "mongo": {
     "connect": "mongodb://192.168.1.26/web-audits"
