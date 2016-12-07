@@ -30,10 +30,7 @@
     "moment": "^2.15.1",
     "mongodb": "^2.1.18",
     "mongoose": "^4.5.3",
-    "os": "^0.1.1",
-    "passport": "^0.3.2",
-    "passport-http": "^0.3.0",
-    "passport-local": "^1.0.0"
+    "os": "^0.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.10.4",
