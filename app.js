@@ -9,7 +9,6 @@ const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const projects = require('./routes/projects');
-require('./models/init');
 
 // end module dependencies
 

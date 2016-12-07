@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const mongoose = require('../models/init');
 const _ = require('lodash');
 const elastic = require('./elastic');
 const moment = require('moment');
