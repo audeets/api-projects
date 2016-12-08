@@ -1,5 +1,6 @@
 FROM node:6-slim
 ENV appDir /usr/src/app
+ENV yarnDir $HOME/.yarn/bin
 
 # Install app dependencies
 RUN apt-get update -y
@@ -11,7 +12,7 @@ RUN curl -o- -L https://yarnpkg.com/install.sh | bash
 # use changes to package.json to force Docker not to use the cache
 # when we change our application's nodejs dependencies:
 ADD package.json yarn.lock /tmp/
-RUN cd /tmp && $HOME/.yarn/bin/yarn install
+RUN cd /tmp && ${yarnDir}/yarn install
 RUN mkdir -p ${appDir} && cp -a /tmp/node_modules ${appDir}/
 
 # From here we load our application's code in, therefore the previous docker
@@ -24,4 +25,4 @@ VOLUME ${appDir}/config ${appDir}/log
 
 EXPOSE 5000
 
-CMD ["$HOME/.yarn/bin/yarn", "run", "start"]
+CMD ["yarn", "run", "start"]
