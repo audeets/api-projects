@@ -1,6 +1,6 @@
 FROM node:6-slim
 ENV appDir /usr/src/app
-ENV yarnDir $HOME/.yarn/bin
+ENV yarnDir /root/.yarn/bin
 
 # Install app dependencies
 RUN apt-get update -y
