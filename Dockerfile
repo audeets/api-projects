@@ -6,9 +6,9 @@ RUN apt-get update -y
 RUN apt-get install apt-utils bzip2 libfontconfig -y
 
 # install Yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-RUN echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-RUN apt-get update && apt-get install yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get install yarn
 
 # use changes to package.json to force Docker not to use the cache
 # when we change our application's nodejs dependencies:
