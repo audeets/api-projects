@@ -22,6 +22,6 @@ RUN chmod -R +w ${appDir}/log
 
 VOLUME ${appDir}/config ${appDir}/log
 
-EXPOSE 5000∫
+EXPOSE 5000
 
 CMD ["yarn", "run", "start"]
