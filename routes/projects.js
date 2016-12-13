@@ -85,11 +85,9 @@ router.route('/:id/audit/:date')
       floor: req.params.date,
       ceiling: moment(req.params.date, DATE_FORMAT)
         .add(1, 'days').format(DATE_FORMAT),
-      format: DATE_FORMAT
+      format: 'yyyyMMdd' // the ES format is different from the JS format
     }, (err, results) => {
       if (err) return next(err);
-    //    const dateFloor = date.toDate();
-    // const dateCeiling = date.add(1, 'days').toDate();
       res.json(_.map(results.hits.hits, hit => hit._source));
     });
   });
