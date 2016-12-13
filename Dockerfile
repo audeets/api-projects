@@ -19,9 +19,6 @@ RUN mkdir -p ${appDir} && cp -a /tmp/node_modules ${appDir}/
 # "layer" thats been cached will be used if possible
 WORKDIR ${appDir}
 COPY . ${appDir}
-RUN chmod -R +w ${appDir}/log
-
-VOLUME ${appDir}/config ${appDir}/log
 
 EXPOSE 5000
 
