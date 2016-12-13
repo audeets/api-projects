@@ -6,7 +6,7 @@ const elasticConfig = config.get('elasticsearch');
 const templateUrl = url.resolve(elasticConfig.connect.url, '_search/template');
 
 /**
- * Executes a templated query on Elastic Search
+ * Executes a templated query on ElasticSearch
  * @param {string} name the name of the template
  * @param {object} params the parameters to pass onto the query
  * @param {function} callback called with the query results or error

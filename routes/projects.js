@@ -5,6 +5,8 @@ const elastic = require('./elastic');
 const moment = require('moment');
 require('isomorphic-fetch');
 
+const DATE_FORMAT = 'YYYYMMDD';
+
 const Project = mongoose.model('Project');
 const router = express.Router(); // eslint-disable-line new-cap
 
@@ -70,15 +72,21 @@ router.route('/:id/lastaudits')
             return new Date(day.key_as_string);
           }))
           .uniqBy(date => {
-            return moment(date).format('YYYYMMDD');
+            return moment(date).format(DATE_FORMAT);
           })
           .value();
       }, []));
     });
   });
-router.route('/:id/audit')
+router.route('/:id/audit/:date')
   .get((req, res, next) => {
-    elastic.query('audit', {id: req.params.id}, (err, results) => {
+    elastic.query('audit', {
+      id: req.params.id,
+      floor: req.params.date,
+      ceiling: moment(req.params.date, DATE_FORMAT)
+        .add(1, 'days').format(DATE_FORMAT),
+      format: DATE_FORMAT
+    }, (err, results) => {
       if (err) return next(err);
     //    const dateFloor = date.toDate();
     // const dateCeiling = date.add(1, 'days').toDate();

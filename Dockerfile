@@ -25,4 +25,4 @@ VOLUME ${appDir}/config ${appDir}/log
 
 EXPOSE 5000
 
-CMD ["yarn", "run", "start"]
+CMD ["npm", "run", "start"]
