@@ -20,6 +20,6 @@ RUN mkdir -p ${appDir} && cp -a /tmp/node_modules ${appDir}/
 WORKDIR ${appDir}
 COPY . ${appDir}
 
-EXPOSE 5000
+EXPOSE 5001
 
 CMD ["npm", "run", "start"]
