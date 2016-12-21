@@ -82,6 +82,7 @@ router.route('/:id/lastaudits')
           .uniqBy(date => {
             return moment(date).format(DATE_FORMAT);
           })
+          .take(5)
           .value();
       }, []));
     });
