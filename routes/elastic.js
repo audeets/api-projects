@@ -3,7 +3,7 @@ const base64 = require('base-64');
 const url = require('url');
 
 const elasticConfig = config.get('elasticsearch');
-const templateUrl = url.resolve(elasticConfig.connect, '_search/template');
+const templateUrl = url.resolve(elasticConfig.connect.url, '_search/template');
 
 /**
  * Executes a templated query on ElasticSearch
