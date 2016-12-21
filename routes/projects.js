@@ -50,9 +50,9 @@ router.route('/:id/rollingweek')
     elastic.query('rollingweek', {id: req.params.id}, (err, results) => {
       if (err) return next(err);
       res.json(_.map(results.aggregations.categories.buckets, bucket => {
-        let data = {};
-        data[bucket.key] = {
-          rollingWeek: _.map(bucket.day.buckets, (day => {
+        return {
+          category: bucket.key,
+          data: _.map(bucket.day.buckets, (day => {
             const checkedRulesNodes = _(day.scores.buckets)
               .find({key: 1});
             let checkedRules = 0;
@@ -65,7 +65,6 @@ router.route('/:id/rollingweek')
             };
           }))
         };
-        return data;
       }));
     });
   });
