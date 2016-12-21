@@ -31,12 +31,16 @@ router.route('/:id/latestscore')
       if (err) return next(err);
       res.json(_.map(results.aggregations.categories.buckets, bucket => {
         const lastAudit = bucket.day.buckets[0];
-        const checkedRules = _(lastAudit.scores.buckets)
-          .find({key: 1}).doc_count;
+        const checkedRulesNodes = _(lastAudit.scores.buckets)
+          .find({key: 1});
+        let checkedRules = 0;
+        if (!_.isNil(checkedRulesNodes)) {
+          checkedRules = checkedRulesNodes.doc_count;
+        }
         return {
           category: bucket.key,
           date: new Date(lastAudit.key_as_string),
-          score: checkedRules * 100 / lastAudit.doc_count
+          score: Math.floor(checkedRules * 100 / lastAudit.doc_count)
         };
       }));
     });
@@ -49,11 +53,15 @@ router.route('/:id/rollingweek')
         let data = {};
         data[bucket.key] = {
           rollingWeek: _.map(bucket.day.buckets, (day => {
-            const checkedRules = _(day.scores.buckets)
-              .find({key: 1}).doc_count;
+            const checkedRulesNodes = _(day.scores.buckets)
+              .find({key: 1});
+            let checkedRules = 0;
+            if (!_.isNil(checkedRulesNodes)) {
+              checkedRules = checkedRulesNodes.doc_count;
+            }
             return {
               date: new Date(day.key_as_string),
-              score: checkedRules * 100 / day.doc_count
+              score: Math.floor(checkedRules * 100 / day.doc_count)
             };
           }))
         };

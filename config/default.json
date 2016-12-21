@@ -3,6 +3,8 @@
     "connect": "mongodb://192.168.1.26:27027/web-audits"
   },
   "elasticsearch": {
-    "connect": "http://192.168.1.26:9210"
+    "connect": {
+      "url": "http://192.168.1.26:9210"
+    }
   }
 }
