@@ -43,17 +43,17 @@ registry:
   only:
     - master
 
-staging:
-  stage: deploy
-  environment: staging
-  image: cdrx/rancher-gitlab-deploy
-  variables:
-    GIT_STRATEGY: none
-  script:
-    - upgrade --stack $CI_PROJECT_NAMESPACE-staging --wait-for-upgrade-to-finish --no-start-before-stopping --finish-upgrade
-    - curl --header 'Access-Token:o.FJG6cnUeuNLWvQYh3oQJwqeGI6ahd7Xs' --header 'Content-Type:application/json' --data-binary '{"body":"api-projects deployed to staging","title":"audeets.com","type":"note"}' --request POST https://api.pushbullet.com/v2/pushes
-  only:
-    - master
+# staging:
+#   stage: deploy
+#   environment: staging
+#   image: cdrx/rancher-gitlab-deploy
+#   variables:
+#     GIT_STRATEGY: none
+#   script:
+#     - upgrade --stack $CI_PROJECT_NAMESPACE-staging --wait-for-upgrade-to-finish --no-start-before-stopping --finish-upgrade
+#     - curl --header 'Access-Token:o.FJG6cnUeuNLWvQYh3oQJwqeGI6ahd7Xs' --header 'Content-Type:application/json' --data-binary '{"body":"api-projects deployed to staging","title":"audeets.com","type":"note"}' --request POST https://api.pushbullet.com/v2/pushes
+#   only:
+#     - master
 
 production:
   stage: deploy
