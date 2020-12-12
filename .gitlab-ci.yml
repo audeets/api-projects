@@ -3,6 +3,7 @@ services:
   - docker:dind
 
 before_script:
+  - apk add --update curl && rm -rf /var/cache/apk/*
   - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
   - gem install dpl
 
