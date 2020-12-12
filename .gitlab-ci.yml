@@ -2,6 +2,10 @@ image: docker:latest
 services:
   - docker:dind
 
+before_script:
+  - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+  - gem install dpl
+
 stages:
   - build
   - test
@@ -64,8 +68,8 @@ production:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - docker pull $RELEASE_IMAGE
     - docker tag $RELEASE_IMAGE $PRODUCTION_IMAGE
-    - docker login -u="$GITLAB_USER_EMAIL" -p="$HEROKU_API_KEY" $PRODUCTION_REGISTRY
-    - docker push $PRODUCTION_IMAGE
-    #- curl --header 'Access-Token:o.FJG6cnUeuNLWvQYh3oQJwqeGI6ahd7Xs' --header 'Content-Type:application/json' --data-binary '{"body":"api-projects deployed to production","title":"audeets.com","type":"note"}' --request POST https://api.pushbullet.com/v2/pushes
+    # - docker login -u="$GITLAB_USER_EMAIL" -p="$HEROKU_API_KEY" $PRODUCTION_REGISTRY
+    # - docker push $PRODUCTION_IMAGE
+    - dpl --provider=heroku --app=$audeets-api-projects --api-key=$HEROKU_API_KEY
   only:
     - master
