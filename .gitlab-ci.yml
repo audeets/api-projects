@@ -4,7 +4,7 @@ services:
 
 before_script:
   - apk add --update curl && rm -rf /var/cache/apk/*
-  - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+  - curl https://cli-assets.heroku.com/install.sh | sh
   - gem install dpl
 
 stages:
