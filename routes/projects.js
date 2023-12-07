@@ -18,15 +18,18 @@ router.route('/')
       })
       .catch((error)=>{
         return next(error);
-    })
+      })
   })
   .post((req, res, next) => {
     let project = new Project();
     project.url = req.body.url;
-    project.save(err => {
-      if (err) return next(err);
-      res.json(project);
-    });
+    project.save()
+      .then(()=>{
+        res.json(project);
+      })
+      .catch((error)=>{
+        return next(error);
+      });
   });
 router.route('/:id/latestscore')
   .get((req, res, next) => {
