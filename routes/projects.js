@@ -19,10 +19,6 @@ router.route('/')
       .catch((error)=>{
         return next(error);
     })
-    // Project.find((err, projects) => {
-    //   if (err) return next(err);
-    //   return res.json(projects);
-    // });
   })
   .post((req, res, next) => {
     let project = new Project();
