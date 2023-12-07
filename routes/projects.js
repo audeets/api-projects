@@ -12,10 +12,17 @@ const router = express.Router(); // eslint-disable-line new-cap
 
 router.route('/')
   .get((req, res, next) => {
-    Project.find((err, projects) => {
-      if (err) return next(err);
-      return res.json(projects);
-    });
+    Project.find()
+      .then((result)=>{
+        return res.json(result);
+      })
+      .catch((error)=>{
+        return next(error);
+    })
+    // Project.find((err, projects) => {
+    //   if (err) return next(err);
+    //   return res.json(projects);
+    // });
   })
   .post((req, res, next) => {
     let project = new Project();
