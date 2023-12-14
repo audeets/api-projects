@@ -14,7 +14,7 @@ const templateUrl = url.resolve(elasticConfig.connect.url, '_search/template');
 function query(name, params, callback) {
   console.log(`executing template '${name}' with params ${JSON.stringify(params)} on ${templateUrl}`);
   fetch(templateUrl, {
-    method: 'GET',
+    method: 'POST',
     mode: 'cors',
     body: JSON.stringify({
       id: name,
