@@ -13,21 +13,21 @@ const router = express.Router(); // eslint-disable-line new-cap
 router.route('/')
   .get((req, res, next) => {
     Project.find()
-      .then((result)=>{
+      .then(result => {
         return res.json(result);
       })
-      .catch((error)=>{
+      .catch(error => {
         return next(error);
-      })
+      });
   })
   .post((req, res, next) => {
     let project = new Project();
     project.url = req.body.url;
     project.save()
-      .then(()=>{
+      .then(() => {
         res.json(project);
       })
-      .catch((error)=>{
+      .catch(error => {
         return next(error);
       });
   });
