@@ -14,10 +14,10 @@ const templateUrl = url.resolve(elasticConfig.connect.url, '_search/template');
 function query(name, params, callback) {
   console.log(`executing template '${name}' with params ${JSON.stringify(params)} on ${templateUrl}`);
   fetch(templateUrl, {
-    method: 'POST',
+    method: 'GET',
     mode: 'cors',
     body: JSON.stringify({
-      file: name,
+      id: name,
       params
     }),
     headers: new Headers({
