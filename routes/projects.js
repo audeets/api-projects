@@ -122,11 +122,12 @@ router.route('/:id/audits')
 
 router.route('/:id')
   .delete((req, res, next) => {
-    Project
-      .findById(req.params.id)
-      .remove(err => {
-        if (err) return next(err);
+    Project.deleteOne({_id: req.params.id})
+      .then(() => {
         return res.send({id: req.params.id});
+      })
+      .catch(error => {
+        return next(error);
       });
   });
 
