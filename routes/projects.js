@@ -22,6 +22,7 @@ router.route('/')
   .post((req, res, next) => {
     let project = new Project();
     project.url = req.body.url;
+    project.title = req.body.title;
     project.save()
       .then(() => {
         res.json(project);
