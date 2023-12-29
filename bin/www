@@ -21,8 +21,8 @@ app.set('port', port);
  */
 
 var server = https.createServer({
-  key: fs.readFileSync('/etc/ssl/certs/privatekey.pem'),
-  cert: fs.readFileSync('/etc/ssl/certs/certificate.pem')
+  key: fs.readFileSync('/etc/ssl/private/ssl-cert-snakeoil.key'),
+  cert: fs.readFileSync('/etc/ssl/certs/ssl-cert-snakeoil.pem')
 }, app);
 
 /**
