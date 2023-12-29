@@ -22,7 +22,7 @@ app.set('port', port);
 
 var server = https.createServer({
   key: fs.readFileSync('/etc/letsencrypt/live/islay.ddns.net/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/islay.ddns.net/privkey.pem')
+  cert: fs.readFileSync('/etc/letsencrypt/live/islay.ddns.net/fullchain.pem')
 }, app);
 
 /**
