@@ -16,7 +16,7 @@ const projects = require('./routes/projects');
 var app = express();
 app.use(compression());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -29,8 +29,8 @@ app.use((req, res, next) => {
 app.use('/api/projects', projects);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+app.use(function (req, res, next) {
+  var err = new Error('Not Found: ' + req.url);
   err.status = 404;
   next(err);
 });
