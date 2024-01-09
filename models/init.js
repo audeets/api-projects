@@ -1,5 +1,5 @@
-const mongoConfig = process.env.URL_MONGO;
+const mongoUrl = process.env.URL_MONGO;
 const mongoose = require('mongoose');
-mongoose.connect(mongoConfig.connect);
+mongoose.connect(mongoUrl);
 require('./Projects');
 module.exports = mongoose;
