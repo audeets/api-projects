@@ -5,33 +5,28 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('web-audits:server');
 var https = require('https');
+var http = require('http');
 var fs = require('fs');
 
 /**
- * Get port from environment and store in Express.
+ * Create HTTPS server.
  */
-
-var port = normalizePort(process.env.PORT || '5001');
-app.set('port', port);
+var sslPort = normalizePort(process.env.PORT_HTTPS || '5443');
+https.createServer({
+  key: fs.readFileSync('/etc/letsencrypt/live/islay.ddns.net/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/islay.ddns.net/fullchain.pem')
+}, app)
+  .listen(sslPort)
+  .on('error', onError);
 
 /**
  * Create HTTP server.
  */
-
-var server = https.createServer({
-  key: fs.readFileSync('/etc/letsencrypt/live/islay.ddns.net/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/islay.ddns.net/fullchain.pem')
-}, app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+var port = normalizePort(process.env.PORT_HTTP || '5080');
+http.createServer(app)
+  .listen(port)
+  .on('error', onError);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -62,9 +57,9 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string' ?
-    'Pipe ' + port :
-    'Port ' + port;
+  var bind = typeof sslPort === 'string' ?
+    'Pipe ' + sslPort :
+    'Port ' + sslPort;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -81,14 +76,3 @@ function onError(error) {
   }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
-
-function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string' ?
-    'pipe ' + addr :
-    'port ' + addr.port;
-  debug('Listening on ' + bind);
-}

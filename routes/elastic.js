@@ -1,9 +1,7 @@
-const config = require('config');
-const base64 = require('base-64');
 const url = require('url');
 
-const elasticConfig = config.get('elasticsearch');
-const templateUrl = url.resolve(elasticConfig.connect.url, '_search/template');
+const elasticUrl = process.env.URL_ELASTIC_SEARCH;
+const templateUrl = url.resolve(elasticUrl, '_search/template');
 
 /**
  * Executes a templated query on ElasticSearch
@@ -21,8 +19,7 @@ function query(name, params, callback) {
       params
     }),
     headers: new Headers({
-      'Content-Type': 'application/json',
-      'Authorization': 'Basic ' + base64.encode(elasticConfig.connect.auth)
+      'Content-Type': 'application/json'
     })
   })
     .then(response => {

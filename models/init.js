@@ -1,5 +1,4 @@
-const config = require('config');
-const mongoConfig = config.get('mongo');
+const mongoConfig = process.env.URL_MONGO;
 const mongoose = require('mongoose');
 mongoose.connect(mongoConfig.connect);
 require('./Projects');
