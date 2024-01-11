@@ -155,4 +155,15 @@ router.route('/:id')
       });
   });
 
+router.route('/:id')
+  .get((req, res, next) => {
+    Project.findOne({ _id: req.params.id })
+      .then((result) => {
+        return res.send(result);
+      })
+      .catch(error => {
+        return next(error);
+      });
+  });
+
 module.exports = router;
