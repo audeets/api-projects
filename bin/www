@@ -12,13 +12,15 @@ var fs = require('fs');
 /**
  * Create HTTPS server.
  */
-var sslPort = normalizePort(process.env.PORT_HTTPS || '5443');
-https.createServer({
-  key: fs.readFileSync('/etc/letsencrypt/live/islay.ddns.net/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/islay.ddns.net/fullchain.pem')
-}, app)
-  .listen(sslPort)
-  .on('error', onError);
+if (process.env.NODE_ENV !== "development") {
+  var sslPort = normalizePort(process.env.PORT_HTTPS || '5443');
+  https.createServer({
+    key: fs.readFileSync('/etc/letsencrypt/live/islay.ddns.net/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/islay.ddns.net/fullchain.pem')
+  }, app)
+    .listen(sslPort)
+    .on('error', onError);
+}
 
 /**
  * Create HTTP server.
