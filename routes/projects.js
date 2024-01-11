@@ -33,12 +33,12 @@ router.route('/')
   });
 router.route('/:id/latestscore')
   .get((req, res, next) => {
-    elastic.query('latestscore', {id: req.params.id}, (err, results) => {
+    elastic.query('latestscore', { id: req.params.id }, (err, results) => {
       if (err) return next(err);
       res.json(_.map(results.aggregations.categories.buckets, bucket => {
         const lastAudit = bucket.day.buckets[0];
         const checkedRulesNodes = _(lastAudit.scores.buckets)
-          .find({key: 1});
+          .find({ key: 1 });
         let checkedRules = 0;
         if (!_.isNil(checkedRulesNodes)) {
           checkedRules = checkedRulesNodes.doc_count;
@@ -53,14 +53,14 @@ router.route('/:id/latestscore')
   });
 router.route('/:id/rollingweek')
   .get((req, res, next) => {
-    elastic.query('rollingweek', {id: req.params.id}, (err, results) => {
+    elastic.query('rollingweek', { id: req.params.id }, (err, results) => {
       if (err) return next(err);
       res.json(_.map(results.aggregations.categories.buckets, bucket => {
         return {
           category: bucket.key,
           data: _.map(bucket.day.buckets, (day => {
             const checkedRulesNodes = _(day.scores.buckets)
-              .find({key: 1});
+              .find({ key: 1 });
             let checkedRules = 0;
             if (!_.isNil(checkedRulesNodes)) {
               checkedRules = checkedRulesNodes.doc_count;
@@ -74,9 +74,32 @@ router.route('/:id/rollingweek')
       }));
     });
   });
+router.route('/:id/rollingmonth')
+  .get((req, res, next) => {
+    elastic.query('rollingmonth', { id: req.params.id }, (err, results) => {
+      if (err) return next(err);
+      res.json(_.map(results.aggregations.categories.buckets, bucket => {
+        return {
+          category: bucket.key,
+          data: _.map(bucket.month.buckets, (month => {
+            const checkedRulesNodes = _(month.scores.buckets)
+              .find({ key: 1 });
+            let checkedRules = 0;
+            if (!_.isNil(checkedRulesNodes)) {
+              checkedRules = checkedRulesNodes.doc_count;
+            }
+            return {
+              date: new Date(month.key_as_string),
+              score: Math.floor(checkedRules * 100 / month.doc_count)
+            };
+          }))
+        };
+      }));
+    });
+  });
 router.route('/:id/lastaudits')
   .get((req, res, next) => {
-    elastic.query('lastaudits', {id: req.params.id}, (err, results) => {
+    elastic.query('lastaudits', { id: req.params.id }, (err, results) => {
       if (err) return next(err);
       const categories = results.aggregations.categories.buckets;
       res.json(_.reduce(categories, (result, cat) => {
@@ -107,7 +130,7 @@ router.route('/:id/audit/:date')
   });
 router.route('/:id/audits')
   .get((req, res, next) => {
-    elastic.query('audits', {id: req.params.id}, (err, results) => {
+    elastic.query('audits', { id: req.params.id }, (err, results) => {
       if (err) return next(err);
       const categories = results.aggregations.categories.buckets;
       res.json(_.reduce(categories, (result, cat) => {
@@ -123,9 +146,9 @@ router.route('/:id/audits')
 
 router.route('/:id')
   .delete((req, res, next) => {
-    Project.deleteOne({_id: req.params.id})
+    Project.deleteOne({ _id: req.params.id })
       .then(() => {
-        return res.send({id: req.params.id});
+        return res.send({ id: req.params.id });
       })
       .catch(error => {
         return next(error);
