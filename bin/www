@@ -4,31 +4,33 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var https = require('https');
-var http = require('http');
-var fs = require('fs');
+var app = require("../app");
+var https = require("https");
+var http = require("http");
+var fs = require("fs");
 
 /**
  * Create HTTPS server.
  */
 if (process.env.NODE_ENV !== "development") {
-  var sslPort = normalizePort(process.env.PORT_HTTPS || '5443');
-  https.createServer({
-    key: fs.readFileSync('/etc/letsencrypt/live/islay.ddns.net/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/islay.ddns.net/fullchain.pem')
-  }, app)
+  var sslPort = normalizePort(process.env.PORT_HTTPS || "6443");
+  https
+    .createServer(
+      {
+        key: fs.readFileSync(process.env.SSL_KEY_PATH),
+        cert: fs.readFileSync(process.env.SSL_CERT_PATH),
+      },
+      app
+    )
     .listen(sslPort)
-    .on('error', onError);
+    .on("error", onError);
 }
 
 /**
  * Create HTTP server.
  */
-var port = normalizePort(process.env.PORT_HTTP || '5080');
-http.createServer(app)
-  .listen(port)
-  .on('error', onError);
+var port = normalizePort(process.env.PORT_HTTP || "6080");
+http.createServer(app).listen(port).on("error", onError);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -55,26 +57,24 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
+  if (error.syscall !== "listen") {
     throw error;
   }
 
-  var bind = typeof sslPort === 'string' ?
-    'Pipe ' + sslPort :
-    'Port ' + sslPort;
+  var bind =
+    typeof sslPort === "string" ? "Pipe " + sslPort : "Port " + sslPort;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+    case "EACCES":
+      console.error(bind + " requires elevated privileges");
       process.exit(1);
       break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+    case "EADDRINUSE":
+      console.error(bind + " is already in use");
       process.exit(1);
       break;
     default:
       throw error;
   }
 }
-
