@@ -1,7 +1,7 @@
-const url = require('url');
+const url = require("url");
 
 const elasticUrl = process.env.URL_ELASTIC_SEARCH;
-const templateUrl = url.resolve(elasticUrl, '_search/template');
+const templateUrl = url.resolve(elasticUrl, "_search/template");
 
 /**
  * Executes a templated query on ElasticSearch
@@ -10,27 +10,31 @@ const templateUrl = url.resolve(elasticUrl, '_search/template');
  * @param {function} callback called with the query results or error
  */
 function query(name, params, callback) {
-  console.log(`executing template '${name}' with params ${JSON.stringify(params)} on ${templateUrl}`);
+  console.log(
+    `executing template '${name}' with params ${JSON.stringify(
+      params
+    )} on ${templateUrl}`
+  );
   fetch(templateUrl, {
-    method: 'POST',
-    mode: 'cors',
+    method: "POST",
+    mode: "cors",
     body: JSON.stringify({
       id: name,
-      params
+      params,
     }),
     headers: new Headers({
-      'Content-Type': 'application/json'
-    })
+      "Content-Type": "application/json",
+    }),
   })
-    .then(response => {
+    .then((response) => {
       return response.json();
     })
-    .then(results => {
+    .then((results) => {
       callback(null, results);
     })
-    .catch(err => callback(err));
+    .catch((err) => callback(err));
 }
 
 module.exports = {
-  query
+  query,
 };
