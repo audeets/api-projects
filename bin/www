@@ -17,8 +17,8 @@ if (process.env.NODE_ENV !== "development") {
   https
     .createServer(
       {
-        key: fs.readFileSync(process.env.SSL_KEY_PATH),
-        cert: fs.readFileSync(process.env.SSL_CERT_PATH),
+        key: fs.readFileSync(`/certificates/${process.env.PATH_SSL_KEY}`),
+        cert: fs.readFileSync(`/certificates/${process.env.PATH_SSL_CERT}`),
       },
       app
     )
