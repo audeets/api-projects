@@ -7,6 +7,9 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const passport = require("passport");
+require("audeets-api-commons/auth/passport");
 const bodyParser = require("body-parser");
 const projects = require("./routes/projects");
 
@@ -33,8 +36,13 @@ app.use(
       maxAge: 1000 * 60 * 30,
       httpOnly: false,
     },
+    store: MongoStore.create({
+      mongoUrl: process.env.URL_MONGO,
+    }),
   })
 );
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
