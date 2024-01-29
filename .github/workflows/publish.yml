@@ -37,9 +37,6 @@ jobs:
         with:
           node-version: 20
 
-      # - run: npm uninstall -g yarn pnpm
-      # - run: npm install -g corepack
-      # - run: corepack enable 
       - name: create .npmrc file
         run: |
           echo "@benoitquette:registry=https://npm.pkg.github.com" >> .npmrc
