@@ -972,6 +972,14 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
+"@benoitquette/audeets-api-commons@^1.0.0":
+  version "1.0.0"
+  resolved "https://npm.pkg.github.com/download/@benoitquette/audeets-api-commons/1.0.0/9921bb4ef3ae1d0ce5e1fab73002080ef1b48d74#9921bb4ef3ae1d0ce5e1fab73002080ef1b48d74"
+  integrity sha512-7g0SGF7KrBW+hE4XHY9kvXcGCN1iVLgvOQVCJLRhtID3anNSjGVYJcD1VYOsYSDnHBEy0K4z8i6TQzBIn552Sw==
+  dependencies:
+    mongoose "^8.0.2"
+    passport "^0.7.0"
+
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@eslint-community/eslint-utils/-/eslint-utils-4.4.0.tgz#a23514e8fb9af1269d5f7788aa556798d61c6b59"
@@ -1266,13 +1274,6 @@ async@^2.0.1:
   integrity sha512-mzo5dfJYwAn29PeiJ0zvwTo04zj8HDJj0Mn8TD7sno7q12prdbnasKJHhkm2c1LgrhlJ0teaea8860oxi51mGA==
   dependencies:
     lodash "^4.17.14"
-
-"audeets-api-commons@https://github.com/benoitquette/audeets-api-commons":
-  version "1.0.0"
-  resolved "https://github.com/benoitquette/audeets-api-commons#f2c2757033efab2e5193863426487b3f6fb4eef5"
-  dependencies:
-    mongoose "^8.0.2"
-    passport "^0.7.0"
 
 available-typed-arrays@^1.0.5:
   version "1.0.5"
