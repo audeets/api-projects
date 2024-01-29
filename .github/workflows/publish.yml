@@ -35,16 +35,12 @@ jobs:
         with:
           node-version: 20
 
-      - name: Create NPMRC
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> ~/.npmrc
-          echo "@benoitquette:registry=https://npm.pkg.github.com" >> ~/.npmrc
-          echo 'registry "https://registry.yarnpkg.com"' >> ~/.yarnrc
-          cat ~/.npmrc
-          cat ~/.yarnrc
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install 
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
