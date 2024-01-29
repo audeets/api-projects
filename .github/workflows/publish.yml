@@ -37,9 +37,9 @@ jobs:
         with:
           node-version: 20
 
-      - run: npm uninstall -g yarn pnpm
-      - run: npm install -g corepack
-      - run: corepack enable 
+      # - run: npm uninstall -g yarn pnpm
+      # - run: npm install -g corepack
+      # - run: corepack enable 
       - run: yarn install
 
       - name: Build and push Docker images
