@@ -9,7 +9,7 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
-require("audeets-api-commons/auth/passport");
+require("@benoitquette/audeets-api-commons/auth/passport");
 const bodyParser = require("body-parser");
 const projects = require("./routes/projects");
 

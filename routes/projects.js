@@ -1,9 +1,11 @@
 const express = require("express");
-const mongoose = require("audeets-api-commons/models");
+const mongoose = require("@benoitquette/audeets-api-commons/models");
 const _ = require("lodash");
 const elastic = require("../utils/elastic");
 const moment = require("moment");
-const { isUserAuthenticated } = require("audeets-api-commons/middlewares/auth");
+const {
+  isUserAuthenticated,
+} = require("@benoitquette/audeets-api-commons/middlewares/auth");
 
 const DATE_FORMAT = "YYYYMMDD";
 
