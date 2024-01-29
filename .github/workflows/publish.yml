@@ -40,6 +40,12 @@ jobs:
       # - run: npm uninstall -g yarn pnpm
       # - run: npm install -g corepack
       # - run: corepack enable 
+      - name: create .npmrc file
+        run: |
+          echo "@benoitquette:registry=https://npm.pkg.github.com" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> .npmrc
+          echo "always-auth=true" >> .npmrc
+          
       - run: yarn install
 
       - name: Build and push Docker images
