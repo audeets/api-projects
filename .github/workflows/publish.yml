@@ -37,12 +37,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Run install
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install 
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+      - run: yarn install
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
