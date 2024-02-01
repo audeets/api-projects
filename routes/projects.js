@@ -5,6 +5,7 @@ const elastic = require("../utils/elastic");
 const moment = require("moment");
 const {
   isUserAuthenticated,
+  isAuthenticated,
 } = require("@benoitquette/audeets-api-commons/middlewares/auth");
 
 const DATE_FORMAT = "YYYYMMDD";
@@ -14,14 +15,26 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(isUserAuthenticated, (req, res, next) => {
-    Project.find()
-      .then((result) => {
-        return res.json(result);
-      })
-      .catch((error) => {
-        return next(error);
-      });
+  .get(isAuthenticated, (req, res, next) => {
+    if (req.user) {
+      // authenticated mode: we return the user's projects
+      Project.find({ userId: req.user.id })
+        .then((result) => {
+          return res.json(result);
+        })
+        .catch((error) => {
+          return next(error);
+        });
+    } else {
+      // generic mode: we return all projects
+      Project.find()
+        .then((result) => {
+          return res.json(result);
+        })
+        .catch((error) => {
+          return next(error);
+        });
+    }
   })
   .post(isUserAuthenticated, (req, res, next) => {
     let project = new Project();
