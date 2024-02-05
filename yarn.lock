@@ -973,9 +973,9 @@
     to-fast-properties "^2.0.0"
 
 "@benoitquette/audeets-api-commons@^1.0.2":
-  version "1.0.4"
-  resolved "https://npm.pkg.github.com/download/@benoitquette/audeets-api-commons/1.0.4/923eae602fd76d3165163de5a710afd18fb2b869#923eae602fd76d3165163de5a710afd18fb2b869"
-  integrity sha512-Yf/XZV+i8LbRMippN37FXPn36mPi5lpOz4lqUMGb/VInuREkr33Oo7AwUAZjPE05kLwUSwsvPF9lTqGDZ2JKTQ==
+  version "1.0.6"
+  resolved "https://npm.pkg.github.com/download/@benoitquette/audeets-api-commons/1.0.6/71187f772df550b5a7d1c12e78a3f2105cc9804b#71187f772df550b5a7d1c12e78a3f2105cc9804b"
+  integrity sha512-gURrNysKcM3JSGeCL6VNv/OY/9b6GI1O6EpQgW+KsO0TSKUgvNOrJPzgE7uTD0C2I3HapssZtvFxZBKIa+O9xw==
   dependencies:
     mongoose "^8.0.2"
     passport "^0.7.0"

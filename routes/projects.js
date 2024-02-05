@@ -18,7 +18,7 @@ router
   .get(isAuthenticated, (req, res, next) => {
     if (req.user) {
       // authenticated mode: we return the user's projects
-      Project.find({ userId: req.user.id })
+      Project.find({ user: req.user.id })
         .then((result) => {
           return res.json(result);
         })
@@ -37,13 +37,19 @@ router
     }
   })
   .post(isUserAuthenticated, (req, res, next) => {
-    let project = new Project();
-    project.url = req.body.url;
-    project.title = req.body.title;
-    project
-      .save()
-      .then(() => {
-        res.json(project);
+    // let's check how many projects are created
+    Project.countDocuments({ user: req.user.id })
+      .then((count) => {
+        if (count >= 5) res.status(409).json("Limit of 5 projects reached.");
+        else {
+          let project = new Project();
+          project.url = req.body.url;
+          project.title = req.body.title;
+          project.user = req.user.id;
+          project.save().then(() => {
+            res.status(200).json(project);
+          });
+        }
       })
       .catch((error) => {
         return next(error);
@@ -52,7 +58,7 @@ router
 router.route("/:id/latestscore").get(isUserAuthenticated, (req, res, next) => {
   elastic.query("latestscore", { id: req.params.id }, (err, results) => {
     if (err) return next(err);
-    res.json(
+    res.status(200).json(
       _.map(results.aggregations.categories.buckets, (bucket) => {
         const lastAudit = bucket.day.buckets[0];
         const checkedRulesNodes = _(lastAudit.scores.buckets).find({ key: 1 });
@@ -72,7 +78,7 @@ router.route("/:id/latestscore").get(isUserAuthenticated, (req, res, next) => {
 router.route("/:id/rollingweek").get(isUserAuthenticated, (req, res, next) => {
   elastic.query("rollingweek", { id: req.params.id }, (err, results) => {
     if (err) return next(err);
-    res.json(
+    res.status(200).json(
       _.map(results.aggregations.categories.buckets, (bucket) => {
         return {
           category: bucket.key,
@@ -95,7 +101,7 @@ router.route("/:id/rollingweek").get(isUserAuthenticated, (req, res, next) => {
 router.route("/:id/rollingmonth").get(isUserAuthenticated, (req, res, next) => {
   elastic.query("rollingmonth", { id: req.params.id }, (err, results) => {
     if (err) return next(err);
-    res.json(
+    res.status(200).json(
       _.map(results.aggregations.categories.buckets, (bucket) => {
         return {
           category: bucket.key,
@@ -119,7 +125,7 @@ router.route("/:id/lastaudits").get(isUserAuthenticated, (req, res, next) => {
   elastic.query("lastaudits", { id: req.params.id }, (err, results) => {
     if (err) return next(err);
     const categories = results.aggregations.categories.buckets;
-    res.json(
+    res.status(200).json(
       _.reduce(
         categories,
         (result, cat) => {
@@ -154,7 +160,7 @@ router.route("/:id/audit/:date").get(isUserAuthenticated, (req, res, next) => {
     },
     (err, results) => {
       if (err) return next(err);
-      res.json(_.map(results.hits.hits, (hit) => hit._source));
+      res.status(200).json(_.map(results.hits.hits, (hit) => hit._source));
     }
   );
 });
@@ -162,7 +168,7 @@ router.route("/:id/audits").get(isUserAuthenticated, (req, res, next) => {
   elastic.query("audits", { id: req.params.id }, (err, results) => {
     if (err) return next(err);
     const categories = results.aggregations.categories.buckets;
-    res.json(
+    res.status(200).json(
       _.reduce(
         categories,
         (result, cat) => {
