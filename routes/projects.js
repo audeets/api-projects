@@ -40,7 +40,8 @@ router
     // let's check how many projects are created
     Project.countDocuments({ user: req.user.id })
       .then((count) => {
-        if (count >= 5) res.status(409).json("Limit of 5 projects reached.");
+        if (count >= req.user.projectsMax)
+          res.status(409).json("Maximum number of projects reached.");
         else {
           let project = new Project();
           project.url = req.body.url;
