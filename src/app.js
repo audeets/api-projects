@@ -1,22 +1,15 @@
-"use strict";
-
-/**
- * Module dependencies
- */
-
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
-const MongoStore = require("connect-mongo");
-const passport = require("passport");
-require("@benoitquette/audeets-api-commons/auth/passport");
-const bodyParser = require("body-parser");
-const projects = require("./routes/projects");
-
-// end module dependencies
+import express from "express";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import passport from "passport";
+import { init } from "@benoitquette/audeets-api-commons/auth/passport.js";
+import bodyParser from "body-parser";
+import router from "./routes/projects.js";
 
 // Express setup
 var app = express();
+init();
 app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", process.env.CLIENT_BASE_URL);
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT");
@@ -46,6 +39,6 @@ app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use("/api/projects", projects);
+app.use("/api/projects", router);
 
-module.exports = app;
+export default app;

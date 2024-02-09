@@ -1,12 +1,12 @@
-const express = require("express");
-const mongoose = require("@benoitquette/audeets-api-commons/models");
-const _ = require("lodash");
-const elastic = require("../utils/elastic");
-const moment = require("moment");
-const {
+import express from "express";
+import mongoose from "@benoitquette/audeets-api-commons/models/index.js";
+import _ from "lodash";
+import elastic from "../utils/elastic.js";
+import moment from "moment";
+import {
   isUserAuthenticated,
   isAuthenticated,
-} = require("@benoitquette/audeets-api-commons/middlewares/auth");
+} from "@benoitquette/audeets-api-commons/middlewares/auth.js";
 
 const DATE_FORMAT = "YYYYMMDD";
 
@@ -57,7 +57,7 @@ router
       });
   });
 router.route("/:id/latestscore").get(isUserAuthenticated, (req, res, next) => {
-  elastic.query("latestscore", { id: req.params.id }, (err, results) => {
+  elastic("latestscore", { id: req.params.id }, (err, results) => {
     if (err) return next(err);
     res.status(200).json(
       _.map(results.aggregations.categories.buckets, (bucket) => {
@@ -77,7 +77,7 @@ router.route("/:id/latestscore").get(isUserAuthenticated, (req, res, next) => {
   });
 });
 router.route("/:id/rollingweek").get(isUserAuthenticated, (req, res, next) => {
-  elastic.query("rollingweek", { id: req.params.id }, (err, results) => {
+  elastic("rollingweek", { id: req.params.id }, (err, results) => {
     if (err) return next(err);
     res.status(200).json(
       _.map(results.aggregations.categories.buckets, (bucket) => {
@@ -100,7 +100,7 @@ router.route("/:id/rollingweek").get(isUserAuthenticated, (req, res, next) => {
   });
 });
 router.route("/:id/rollingmonth").get(isUserAuthenticated, (req, res, next) => {
-  elastic.query("rollingmonth", { id: req.params.id }, (err, results) => {
+  elastic("rollingmonth", { id: req.params.id }, (err, results) => {
     if (err) return next(err);
     res.status(200).json(
       _.map(results.aggregations.categories.buckets, (bucket) => {
@@ -149,7 +149,7 @@ router.route("/:id/lastaudits").get(isUserAuthenticated, (req, res, next) => {
   });
 });
 router.route("/:id/audit/:date").get(isUserAuthenticated, (req, res, next) => {
-  elastic.query(
+  elastic(
     "audit",
     {
       id: req.params.id,
@@ -166,7 +166,7 @@ router.route("/:id/audit/:date").get(isUserAuthenticated, (req, res, next) => {
   );
 });
 router.route("/:id/audits").get(isUserAuthenticated, (req, res, next) => {
-  elastic.query("audits", { id: req.params.id }, (err, results) => {
+  elastic("audits", { id: req.params.id }, (err, results) => {
     if (err) return next(err);
     const categories = results.aggregations.categories.buckets;
     res.status(200).json(
@@ -227,4 +227,4 @@ router
       });
   });
 
-module.exports = router;
+export default router;

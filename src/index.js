@@ -1,13 +1,7 @@
-#!/usr/bin/env node
-
-/**
- * Module dependencies.
- */
-
-var app = require("../app");
-var https = require("https");
-var http = require("http");
-var fs = require("fs");
+import app from "./app.js";
+import https from "https";
+import http from "http";
+import fs from "fs";
 
 /**
  * Create HTTPS server.
