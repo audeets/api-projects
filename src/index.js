@@ -1,6 +1,16 @@
+import express from "express";
 import app from "@benoitquette/audeets-api-commons/app.js";
 import server from "@benoitquette/audeets-api-commons/server.js";
-import router from "./routes/projects.js";
+import routerProjects from "./routes/projects.js";
+import routerProject from "./routes/project.js";
+import routerScores from "./routes/scores.js";
+import routerAudits from "./routes/audits.js";
+
+const router = express.Router();
+routerProjects.addRoutes(router, "/");
+routerProject.addRoutes(router, "/:id");
+routerScores.addRoutes(router, "/:id/scores");
+routerAudits.addRoutes(router, "/:id/audits");
 
 const expressApp = app.createApp("GET,POST,DELETE,PUT");
 expressApp.use("/api/projects", router);
