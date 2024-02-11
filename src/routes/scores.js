@@ -32,26 +32,7 @@ const addRoutes = (router, baseRoute) => {
     .get(isUserAuthenticated, (req, res, next) => {
       elastic("rollingweek", { id: req.params.id }, (err, results) => {
         if (err) return next(err);
-        res.status(200).json(
-          _.map(results.aggregations.categories.buckets, (bucket) => {
-            return {
-              category: bucket.key,
-              data: _.map(bucket.day.buckets, (day) => {
-                const checkedRulesNodes = _(day.scores.buckets).find({
-                  key: 1,
-                });
-                let checkedRules = 0;
-                if (!_.isNil(checkedRulesNodes)) {
-                  checkedRules = checkedRulesNodes.doc_count;
-                }
-                return {
-                  date: new Date(day.key_as_string),
-                  score: Math.floor((checkedRules * 100) / day.doc_count),
-                };
-              }),
-            };
-          })
-        );
+        res.status(200).json(mapScores(results, "day"));
       });
     });
   router
@@ -59,28 +40,57 @@ const addRoutes = (router, baseRoute) => {
     .get(isUserAuthenticated, (req, res, next) => {
       elastic("rollingmonth", { id: req.params.id }, (err, results) => {
         if (err) return next(err);
-        res.status(200).json(
-          _.map(results.aggregations.categories.buckets, (bucket) => {
-            return {
-              category: bucket.key,
-              data: _.map(bucket.month.buckets, (month) => {
-                const checkedRulesNodes = _(month.scores.buckets).find({
-                  key: 1,
-                });
-                let checkedRules = 0;
-                if (!_.isNil(checkedRulesNodes)) {
-                  checkedRules = checkedRulesNodes.doc_count;
-                }
-                return {
-                  date: new Date(month.key_as_string),
-                  score: Math.floor((checkedRules * 100) / month.doc_count),
-                };
-              }),
-            };
-          })
-        );
+        res.status(200).json(mapScores(results, "month"));
       });
     });
 };
+
+function createWeekDataStructure(data) {
+  const length = 7;
+  let res = [];
+  const today = new Date();
+  for (let i = 1; i <= length; i++) {
+    let date = new Date();
+    date.setDate(today.getDate() - length + i);
+    const offset = Math.abs(date.getTimezoneOffset() / 60);
+    date.setHours(offset, 0, 0, 0);
+    const score = findByDate(date, data);
+    res.push({ date, score });
+  }
+  return res;
+}
+
+function findByDate(date, data) {
+  for (const item of data) {
+    if (item[0].getTime() === date.getTime() && !isNaN(item[1])) return item[1];
+  }
+  return null;
+}
+
+function mapScores(results, bucketName) {
+  return _.map(results.aggregations.categories.buckets, (bucket) => {
+    const categoryName = bucket.key;
+    const datafromElastic = _.map(bucket[bucketName].buckets, (data) => {
+      const date = new Date(data.key_as_string);
+      const checkedRulesNodes = _(data.scores.buckets).find({ key: 1 });
+      let checkedRules = _.isNil(checkedRulesNodes)
+        ? 0
+        : checkedRulesNodes.doc_count;
+      const score = Math.floor((checkedRules * 100) / data.doc_count);
+      return [date, score];
+    });
+    const data =
+      bucketName == "month"
+        ? datafromElastic.map((item) => ({
+            date: item[0],
+            score: item[1],
+          }))
+        : createWeekDataStructure(datafromElastic);
+    return {
+      category: categoryName,
+      data,
+    };
+  });
+}
 
 export default { addRoutes };
