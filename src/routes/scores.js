@@ -1,6 +1,9 @@
 import _ from "lodash";
 import elastic from "../utils/elastic.js";
 import { isUserAuthenticated } from "@benoitquette/audeets-api-commons/middlewares/auth.js";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc.js";
+dayjs.extend(utc);
 
 const addRoutes = (router, baseRoute) => {
   router
@@ -32,7 +35,7 @@ const addRoutes = (router, baseRoute) => {
     .get(isUserAuthenticated, (req, res, next) => {
       elastic("rollingweek", { id: req.params.id }, (err, results) => {
         if (err) return next(err);
-        res.status(200).json(mapScores(results, "day"));
+        res.status(200).json(mapScores(results, "days", 7));
       });
     });
   router
@@ -40,22 +43,33 @@ const addRoutes = (router, baseRoute) => {
     .get(isUserAuthenticated, (req, res, next) => {
       elastic("rollingmonth", { id: req.params.id }, (err, results) => {
         if (err) return next(err);
-        res.status(200).json(mapScores(results, "month"));
+        res.status(200).json(mapScores(results, "days", 30));
+      });
+    });
+  router
+    .route(`${baseRoute}/year`)
+    .get(isUserAuthenticated, (req, res, next) => {
+      elastic("rollingyear", { id: req.params.id }, (err, results) => {
+        if (err) return next(err);
+        res.status(200).json(mapScores(results, "months", 12));
       });
     });
 };
 
-function createWeekDataStructure(data) {
-  const length = 7;
+function createDataStructure(data, length, unit) {
   let res = [];
-  const today = new Date();
+  const now = dayjs();
   for (let i = 1; i <= length; i++) {
-    let date = new Date();
-    date.setDate(today.getDate() - length + i);
-    const offset = Math.abs(date.getTimezoneOffset() / 60);
-    date.setHours(offset, 0, 0, 0);
-    const score = findByDate(date, data);
-    res.push({ date, score });
+    let date = now.subtract(length - i, unit);
+    date = date.utc().millisecond(0);
+    date = date.utc().second(0);
+    date = date.utc().minute(0);
+    date = date.utc().hour(0);
+    if (unit === "months") date = date.utc().date(1);
+    res.push({
+      date,
+      score: findByDate(date.toDate(), data),
+    });
   }
   return res;
 }
@@ -67,7 +81,7 @@ function findByDate(date, data) {
   return null;
 }
 
-function mapScores(results, bucketName) {
+function mapScores(results, bucketName, length) {
   return _.map(results.aggregations.categories.buckets, (bucket) => {
     const categoryName = bucket.key;
     const datafromElastic = _.map(bucket[bucketName].buckets, (data) => {
@@ -79,13 +93,7 @@ function mapScores(results, bucketName) {
       const score = Math.floor((checkedRules * 100) / data.doc_count);
       return [date, score];
     });
-    const data =
-      bucketName == "month"
-        ? datafromElastic.map((item) => ({
-            date: item[0],
-            score: item[1],
-          }))
-        : createWeekDataStructure(datafromElastic);
+    const data = createDataStructure(datafromElastic, length, bucketName);
     return {
       category: categoryName,
       data,
