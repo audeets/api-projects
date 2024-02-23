@@ -972,10 +972,10 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
-"@benoitquette/audeets-api-commons@^1.0.15":
-  version "1.0.15"
-  resolved "https://npm.pkg.github.com/download/@benoitquette/audeets-api-commons/1.0.15/89529b0efe7dec09dcb8c1391241fdc7c4c18e6a#89529b0efe7dec09dcb8c1391241fdc7c4c18e6a"
-  integrity sha512-FeMQR9pnKex5dBFuL1sg6wxlefMNKV17nBC8O1fqIQ6Rg+ID6Vz+hB4yrHaAdaLn5L+VIT698zCG9Knj5XrNWg==
+"@benoitquette/audeets-api-commons@^1.0.16":
+  version "1.0.16"
+  resolved "https://npm.pkg.github.com/download/@benoitquette/audeets-api-commons/1.0.16/c0e6210a2288b50015e82211723b202d6fb071d9#c0e6210a2288b50015e82211723b202d6fb071d9"
+  integrity sha512-lafuqj5L0rYg1zKkNzPc/6GwAu53hkdSbum4LVhFa833fi9kGxnKY7unf77kV39f/tds6G/sA0Uzf9zvldEwSg==
   dependencies:
     mongoose "^8.1.1"
     passport "^0.7.0"
