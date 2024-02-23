@@ -37,18 +37,7 @@
   },
   "babel": {
     "presets": [
-      [
-        "@babel/env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        }
-      ]
-    ],
-    "plugins": [
-      "@babel/plugin-transform-class-properties",
-      "@babel/plugin-transform-object-rest-spread"
+      "@babel/preset-env"
     ]
   }
 }
