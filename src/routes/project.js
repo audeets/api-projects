@@ -8,16 +8,23 @@ const addRoutes = (router, baseRoute) => {
   router
     .route(baseRoute)
     .delete(isUserAuthenticated, (req, res, next) => {
-      Project.deleteOne({ _id: req.params.id, user: req.user.id })
-        .then(() => {
-          return res.send({ id: req.params.id });
+      Project.findOne({ _id: req.params.id, user: req.user.id })
+        .then((result) => {
+          if (!result) {
+            return res.status(404).send("Project not found");
+          } else {
+            result.deleted = true;
+            result.save().then(() => {
+              return res.send({ id: req.params.id });
+            });
+          }
         })
         .catch((error) => {
           return next(error);
         });
     })
     .get(isUserAuthenticated, (req, res, next) => {
-      Project.findOne({ _id: req.params.id, user: req.user.id })
+      Project.findOne({ _id: req.params.id, user: req.user.id, deleted: false })
         .then((result) => {
           return res.send(result);
         })
@@ -31,8 +38,9 @@ const addRoutes = (router, baseRoute) => {
           if (!result) {
             return res.status(404).send("Project not found");
           } else {
-            result.url = req.body.url;
+            result.urls = req.body.urls;
             result.title = req.body.title;
+            result.domain = req.body.domain;
             result.save().then(() => {
               return res.status(200).json(result);
             });
