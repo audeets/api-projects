@@ -1,4 +1,3 @@
-import _ from "lodash";
 import elastic from "../utils/elastic.js";
 import { isUserAuthenticated } from "@benoitquette/audeets-api-commons/middlewares/auth.js";
 import dayjs from "dayjs";
@@ -12,15 +11,12 @@ const addRoutes = (router, baseRoute) => {
       elastic("latestscore", { id: req.params.id }, (err, results) => {
         if (err) return next(err);
         res.status(200).json(
-          _.map(results.aggregations.categories.buckets, (bucket) => {
+          results.aggregations.categories.buckets.map((bucket) => {
             const lastAudit = bucket.day.buckets[0];
-            const checkedRulesNodes = _(lastAudit.scores.buckets).find({
-              key: 1,
-            });
-            let checkedRules = 0;
-            if (!_.isNil(checkedRulesNodes)) {
-              checkedRules = checkedRulesNodes.doc_count;
-            }
+            const checkedRules = data.scores.buckets.reduce(
+              (count, value) => (value.key === 1 ? value.doc_count : count),
+              0
+            );
             return {
               category: bucket.key,
               date: new Date(lastAudit.key_as_string),
@@ -82,14 +78,14 @@ function findByDate(date, data) {
 }
 
 function mapScores(results, bucketName, length) {
-  return _.map(results.aggregations.categories.buckets, (bucket) => {
+  return results.aggregations.categories.buckets.map((bucket) => {
     const categoryName = bucket.key;
-    const datafromElastic = _.map(bucket[bucketName].buckets, (data) => {
+    const datafromElastic = bucket[bucketName].buckets.map((data) => {
       const date = new Date(data.key_as_string);
-      const checkedRulesNodes = _(data.scores.buckets).find({ key: 1 });
-      let checkedRules = _.isNil(checkedRulesNodes)
-        ? 0
-        : checkedRulesNodes.doc_count;
+      const checkedRules = data.scores.buckets.reduce(
+        (count, value) => (value.key === 1 ? value.doc_count : count),
+        0
+      );
       const score = Math.floor((checkedRules * 100) / data.doc_count);
       return [date, score];
     });
