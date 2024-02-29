@@ -16,7 +16,7 @@ const addRoutes = (router, baseRoute) => {
           res.status(200).json(
             results.aggregations.categories.buckets.map((bucket) => {
               const lastAudit = bucket.day.buckets[0];
-              const checkedRules = data.scores.buckets.reduce(
+              const checkedRules = lastAudit.scores.buckets.reduce(
                 (count, value) => (value.key === 1 ? value.doc_count : count),
                 0
               );
