@@ -1,5 +1,4 @@
 import mongoose from "@benoitquette/audeets-api-commons/models/index.js";
-import _ from "lodash";
 import {
   isUserAuthenticated,
   isAuthenticated,
