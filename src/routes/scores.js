@@ -8,23 +8,27 @@ const addRoutes = (router, baseRoute) => {
   router
     .route(`${baseRoute}/latest`)
     .get(isUserAuthenticated, (req, res, next) => {
-      elastic("latestscore", { id: req.params.id }, (err, results) => {
-        if (err) return next(err);
-        res.status(200).json(
-          results.aggregations.categories.buckets.map((bucket) => {
-            const lastAudit = bucket.day.buckets[0];
-            const checkedRules = data.scores.buckets.reduce(
-              (count, value) => (value.key === 1 ? value.doc_count : count),
-              0
-            );
-            return {
-              category: bucket.key,
-              date: new Date(lastAudit.key_as_string),
-              score: Math.floor((checkedRules * 100) / lastAudit.doc_count),
-            };
-          })
-        );
-      });
+      elastic(
+        "latestscore",
+        { id: req.params.id, url: decodeURI(req.query.url) },
+        (err, results) => {
+          if (err) return next(err);
+          res.status(200).json(
+            results.aggregations.categories.buckets.map((bucket) => {
+              const lastAudit = bucket.day.buckets[0];
+              const checkedRules = data.scores.buckets.reduce(
+                (count, value) => (value.key === 1 ? value.doc_count : count),
+                0
+              );
+              return {
+                category: bucket.key,
+                date: new Date(lastAudit.key_as_string),
+                score: Math.floor((checkedRules * 100) / lastAudit.doc_count),
+              };
+            })
+          );
+        }
+      );
     });
   router
     .route(`${baseRoute}/week`)
