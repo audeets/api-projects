@@ -9,7 +9,7 @@
     "dev": "node --trace-deprecation --watch --env-file=.env ./src/index.js"
   },
   "dependencies": {
-    "@benoitquette/audeets-api-commons": "^1.0.19",
+    "@benoitquette/audeets-api-commons": "^1.0.21",
     "async": "^3.2.5",
     "body-parser": "^1.20.2",
     "connect-mongo": "^5.1.0",
@@ -38,5 +38,6 @@
     "presets": [
       "@babel/preset-env"
     ]
-  }
+  },
+  "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
 }
