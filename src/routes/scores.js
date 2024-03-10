@@ -23,6 +23,7 @@ const addRoutes = (router, baseRoute) => {
                 0
               );
               return {
+                project: req.params.id,
                 category: bucket.key,
                 date: new Date(lastAudit.key_as_string),
                 score: Math.floor((checkedRules * 100) / lastAudit.doc_count),
@@ -55,6 +56,7 @@ const addRoutes = (router, baseRoute) => {
                 0
               );
               return {
+                project: req.params.id,
                 category: bucket.key,
                 date: new Date(lastAudit.key_as_string),
                 score: Math.floor((checkedRules * 100) / lastAudit.doc_count),
@@ -77,6 +79,7 @@ const addRoutes = (router, baseRoute) => {
               0
             );
             return {
+              project: req.params.id,
               category: bucket.key,
               date: new Date(lastAudit.key_as_string),
               score: Math.floor((checkedRules * 100) / lastAudit.doc_count),
