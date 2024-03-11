@@ -3,7 +3,7 @@ module.exports = {
   env: {
     es2021: true
   },
-  extends: ['prettier', 'eslint:recommended', 'plugin:import/recommended'],
+  extends: ['eslint:recommended', 'plugin:import/recommended'],
   parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaFeatures: {
@@ -13,7 +13,6 @@ module.exports = {
     ecmaVersion: 12,
     requireConfigFile: false
   },
-  plugins: ['prettier'],
   rules: {
     'no-undef': 'off',
     'no-param-reassign': 'off',
@@ -28,18 +27,6 @@ module.exports = {
       'error',
       {
         ignoreRestSiblings: false
-      }
-    ],
-    'prettier/prettier': [
-      'warn',
-      {
-        bracketSpacing: true,
-        printWidth: 140,
-        singleQuote: true,
-        trailingComma: 'none',
-        tabWidth: 2,
-        useTabs: false,
-        endOfLine: 'auto'
       }
     ]
   }
