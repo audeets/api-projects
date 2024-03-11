@@ -1,36 +1,28 @@
-import elastic from "../utils/elastic.js";
-import { isUserAuthenticated } from "@benoitquette/audeets-api-commons/middlewares/auth.js";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc.js";
+import { isUserAuthenticated } from '@benoitquette/audeets-api-commons/middlewares/auth.js';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc.js';
+import elastic from '../utils/elastic.js';
 dayjs.extend(utc);
 
-const DATE_FORMAT = "YYYYMMDD";
-
 const addRoutes = (router, baseRoute) => {
-  router
-    .route(`${baseRoute}/week`)
-    .get(isUserAuthenticated, (req, res, next) => {
-      elastic("rollingweek", { id: req.params.id }, (err, results) => {
-        if (err) return next(err);
-        res.status(200).json(mapScores(results, "days", 7));
-      });
+  router.route(`${baseRoute}/week`).get(isUserAuthenticated, (req, res, next) => {
+    elastic('rollingweek', { id: req.params.id }, (err, results) => {
+      if (err) return next(err);
+      res.status(200).json(mapScores(results, 'days', 7));
     });
-  router
-    .route(`${baseRoute}/month`)
-    .get(isUserAuthenticated, (req, res, next) => {
-      elastic("rollingmonth", { id: req.params.id }, (err, results) => {
-        if (err) return next(err);
-        res.status(200).json(mapScores(results, "days", 30));
-      });
+  });
+  router.route(`${baseRoute}/month`).get(isUserAuthenticated, (req, res, next) => {
+    elastic('rollingmonth', { id: req.params.id }, (err, results) => {
+      if (err) return next(err);
+      res.status(200).json(mapScores(results, 'days', 30));
     });
-  router
-    .route(`${baseRoute}/year`)
-    .get(isUserAuthenticated, (req, res, next) => {
-      elastic("rollingyear", { id: req.params.id }, (err, results) => {
-        if (err) return next(err);
-        res.status(200).json(mapScores(results, "months", 12));
-      });
+  });
+  router.route(`${baseRoute}/year`).get(isUserAuthenticated, (req, res, next) => {
+    elastic('rollingyear', { id: req.params.id }, (err, results) => {
+      if (err) return next(err);
+      res.status(200).json(mapScores(results, 'months', 12));
     });
+  });
 };
 
 function createDataStructure(data, length, unit) {
@@ -42,10 +34,10 @@ function createDataStructure(data, length, unit) {
     date = date.utc().second(0);
     date = date.utc().minute(0);
     date = date.utc().hour(0);
-    if (unit === "months") date = date.utc().date(1);
+    if (unit === 'months') date = date.utc().date(1);
     res.push({
       date,
-      score: findByDate(date.toDate(), data),
+      score: findByDate(date.toDate(), data)
     });
   }
   return res;
@@ -63,17 +55,14 @@ function mapScores(results, bucketName, length) {
     const categoryName = bucket.key;
     const datafromElastic = bucket[bucketName].buckets.map((data) => {
       const date = new Date(data.key_as_string);
-      const checkedRules = data.scores.buckets.reduce(
-        (count, value) => (value.key === 1 ? value.doc_count : count),
-        0
-      );
+      const checkedRules = data.scores.buckets.reduce((count, value) => (value.key === 1 ? value.doc_count : count), 0);
       const score = Math.floor((checkedRules * 100) / data.doc_count);
       return [date, score];
     });
     const data = createDataStructure(datafromElastic, length, bucketName);
     return {
       category: categoryName,
-      data,
+      data
     };
   });
 }

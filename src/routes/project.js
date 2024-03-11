@@ -1,7 +1,7 @@
-import mongoose from "@benoitquette/audeets-api-commons/models/index.js";
-import { isUserAuthenticated } from "@benoitquette/audeets-api-commons/middlewares/auth.js";
+import mongoose from '@benoitquette/audeets-api-commons/models/index.js';
+import { isUserAuthenticated } from '@benoitquette/audeets-api-commons/middlewares/auth.js';
 
-const Project = mongoose.model("Project");
+const Project = mongoose.model('Project');
 
 const addRoutes = (router, baseRoute) => {
   router
@@ -10,7 +10,7 @@ const addRoutes = (router, baseRoute) => {
       Project.findOne({ _id: req.params.id, user: req.user.id })
         .then((result) => {
           if (!result) {
-            return res.status(404).send("Project not found");
+            return res.status(404).send('Project not found');
           } else {
             result.deleted = true;
             result.save().then(() => {
@@ -35,7 +35,7 @@ const addRoutes = (router, baseRoute) => {
       Project.findOne({ _id: req.params.id, user: req.user.id })
         .then((result) => {
           if (!result) {
-            return res.status(404).send("Project not found");
+            return res.status(404).send('Project not found');
           } else {
             result.urls = req.body.urls;
             result.title = req.body.title;
