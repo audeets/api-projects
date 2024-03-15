@@ -7,10 +7,11 @@
   "scripts": {
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0 --fix",
     "start": "node --env-file=.env ./src/index.js",
-    "dev": "node --trace-deprecation --watch --env-file=.env ./src/index.js"
+    "dev": "node --trace-deprecation --watch --env-file=.env ./src/index.js",
+    "update": "npx npm-check-updates -u && yarn install"
   },
   "dependencies": {
-    "@benoitquette/audeets-api-commons": "^1.0.26",
+    "@benoitquette/audeets-api-commons": "^1.0.28",
     "dayjs": "^1.11.10"
   },
   "devDependencies": {
