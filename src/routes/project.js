@@ -1,5 +1,5 @@
-import mongoose from '@benoitquette/audeets-api-commons/models/index.js';
-import { isUserAuthenticated } from '@benoitquette/audeets-api-commons/middlewares/auth.js';
+import mongoose from '@audeets/audeets-api-commons/models/index.js';
+import { isUserAuthenticated } from '@audeets/api-commons/middlewares/auth.js';
 
 const Project = mongoose.model('Project');
 

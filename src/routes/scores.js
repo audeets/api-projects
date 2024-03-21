@@ -1,4 +1,4 @@
-import { isUserAuthenticated } from '@benoitquette/audeets-api-commons/middlewares/auth.js';
+import { isUserAuthenticated } from '@audeets/api-commons/middlewares/auth.js';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat.js';
 import elastic from '../utils/elastic.js';
@@ -13,7 +13,10 @@ const addRoutes = (router, baseRoute) => {
       res.status(200).json(
         results.aggregations.categories.buckets.map((bucket) => {
           const lastAudit = bucket.day.buckets[0];
-          const checkedRules = lastAudit.scores.buckets.reduce((count, value) => (value.key === 1 ? value.doc_count : count), 0);
+          const checkedRules = lastAudit.scores.buckets.reduce(
+            (count, value) => (value.key === 1 ? value.doc_count : count),
+            0
+          );
           return {
             project: req.params.id,
             category: bucket.key,
@@ -38,7 +41,10 @@ const addRoutes = (router, baseRoute) => {
         res.status(200).json(
           results.aggregations.categories.buckets.map((bucket) => {
             const lastAudit = bucket.day.buckets[0];
-            const checkedRules = lastAudit.scores.buckets.reduce((count, value) => (value.key === 1 ? value.doc_count : count), 0);
+            const checkedRules = lastAudit.scores.buckets.reduce(
+              (count, value) => (value.key === 1 ? value.doc_count : count),
+              0
+            );
             return {
               project: req.params.id,
               category: bucket.key,
@@ -56,7 +62,10 @@ const addRoutes = (router, baseRoute) => {
       res.status(200).json(
         results.aggregations.categories.buckets.map((bucket) => {
           const lastAudit = bucket.day.buckets[0];
-          const checkedRules = lastAudit.scores.buckets.reduce((count, value) => (value.key === 1 ? value.doc_count : count), 0);
+          const checkedRules = lastAudit.scores.buckets.reduce(
+            (count, value) => (value.key === 1 ? value.doc_count : count),
+            0
+          );
           return {
             project: req.params.id,
             category: bucket.key,

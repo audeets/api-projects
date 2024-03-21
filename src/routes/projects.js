@@ -1,5 +1,8 @@
-import mongoose from '@benoitquette/audeets-api-commons/models/index.js';
-import { isUserAuthenticated, isAuthenticated } from '@benoitquette/audeets-api-commons/middlewares/auth.js';
+import mongoose from '@audeets/api-commons/models/index.js';
+import {
+  isUserAuthenticated,
+  isAuthenticated
+} from '@audeets/audeets-api-commons/middlewares/auth.js';
 
 const Project = mongoose.model('Project');
 
@@ -31,7 +34,8 @@ const addRoutes = (router, baseRoute) => {
       // let's check how many projects are created
       Project.countDocuments({ user: req.user.id, deleted: false })
         .then((count) => {
-          if (count >= req.user.projectsMax) res.status(409).json('Maximum number of projects reached.');
+          if (count >= req.user.projectsMax)
+            res.status(409).json('Maximum number of projects reached.');
           else {
             let project = new Project();
             project.urls = req.body.urls;

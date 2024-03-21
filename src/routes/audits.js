@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat.js';
-import { isUserAuthenticated } from '@benoitquette/audeets-api-commons/middlewares/auth.js';
+import { isUserAuthenticated } from '@audeets/api-commons/middlewares/auth.js';
 import elastic from '../utils/elastic.js';
 
 const DATE_FORMAT = 'YYYYMMDD';
@@ -18,7 +18,13 @@ const addRoutes = (router, baseRoute) => {
       },
       (err, results) => {
         if (err) return next(err);
-        res.status(200).json(results.aggregations.rules.buckets.map((bucket) => bucket.rules_hits.hits.hits[0]._source));
+        res
+          .status(200)
+          .json(
+            results.aggregations.rules.buckets.map(
+              (bucket) => bucket.rules_hits.hits.hits[0]._source
+            )
+          );
       }
     );
   });

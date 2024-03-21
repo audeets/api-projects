@@ -11,7 +11,7 @@
     "update": "npx npm-check-updates -u && yarn install"
   },
   "dependencies": {
-    "@benoitquette/audeets-api-commons": "^1.0.28",
+    "@audeets/api-commons": "^1.0.28",
     "dayjs": "^1.11.10"
   },
   "devDependencies": {

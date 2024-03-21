@@ -1,4 +1,4 @@
-import { isUserAuthenticated } from '@benoitquette/audeets-api-commons/middlewares/auth.js';
+import { isUserAuthenticated } from '@audeets/api-commons/middlewares/auth.js';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';
 import elastic from '../utils/elastic.js';
@@ -55,7 +55,10 @@ function mapScores(results, bucketName, length) {
     const categoryName = bucket.key;
     const datafromElastic = bucket[bucketName].buckets.map((data) => {
       const date = new Date(data.key_as_string);
-      const checkedRules = data.scores.buckets.reduce((count, value) => (value.key === 1 ? value.doc_count : count), 0);
+      const checkedRules = data.scores.buckets.reduce(
+        (count, value) => (value.key === 1 ? value.doc_count : count),
+        0
+      );
       const score = Math.floor((checkedRules * 100) / data.doc_count);
       return [date, score];
     });
