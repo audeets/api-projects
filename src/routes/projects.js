@@ -1,8 +1,5 @@
 import mongoose from '@audeets/api-commons/models/index.js';
-import {
-  isUserAuthenticated,
-  isAuthenticated
-} from '@audeets/audeets-api-commons/middlewares/auth.js';
+import { isUserAuthenticated, isAuthenticated } from '@audeets/api-commons/middlewares/auth.js';
 
 const Project = mongoose.model('Project');
 
